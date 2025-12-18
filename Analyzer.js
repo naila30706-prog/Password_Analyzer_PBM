@@ -1,6 +1,3 @@
-// TES_PBL - Password Weakness Analyzer
-// Client-side JavaScript for password analysis and AES-256-CBC encryption
-
 // Generate random key and IV
 let KEY = CryptoJS.lib.WordArray.random(32);
 let IV = CryptoJS.lib.WordArray.random(16);
@@ -25,33 +22,23 @@ function checkStrength(password) {
 
     if (password.length < 8) {
         suggestions.push("Minimal 8 karakter");
-    } else {
-        score += 1;
-    }
+    } else score++;
 
     if (!/[A-Z]/.test(password)) {
         suggestions.push("Tambahkan huruf besar");
-    } else {
-        score += 1;
-    }
+    } else score++;
 
     if (!/[a-z]/.test(password)) {
         suggestions.push("Tambahkan huruf kecil");
-    } else {
-        score += 1;
-    }
+    } else score++;
 
     if (!/\d/.test(password)) {
         suggestions.push("Tambahkan angka");
-    } else {
-        score += 1;
-    }
+    } else score++;
 
     if (!/[^a-zA-Z0-9]/.test(password)) {
         suggestions.push("Tambahkan simbol");
-    } else {
-        score += 1;
-    }
+    } else score++;
 
     const common = ['123456', 'qwerty', 'password', 'admin', '123456789', 'qwerty123'];
     if (common.includes(password.toLowerCase())) {
@@ -67,31 +54,30 @@ function checkStrength(password) {
     return [strength, suggestions];
 }
 
-document.getElementById('passwordForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const password = document.getElementById('password').value;
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("passwordForm").addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    if (password) {
+        const password = document.getElementById("password").value;
+        if (!password) return;
+
         const [strength, suggestions] = checkStrength(password);
         const [encrypted, keyDisplay] = encryptPassword(password);
 
-        // Display strength
-        document.getElementById('strengthDisplay').textContent = strength + '%';
-        document.getElementById('strengthDisplay').style.display = 'block';
+        document.getElementById("strengthDisplay").textContent = strength + "%";
+        document.getElementById("strengthDisplay").style.display = "block";
 
-        // Display suggestions
-        const suggestionsList = document.getElementById('suggestionsList');
-        suggestionsList.innerHTML = '';
+        const suggestionsList = document.getElementById("suggestionsList");
+        suggestionsList.innerHTML = "";
         suggestions.forEach(s => {
-            const li = document.createElement('li');
+            const li = document.createElement("li");
             li.textContent = s;
             suggestionsList.appendChild(li);
         });
-        document.getElementById('suggestionsBox').style.display = 'block';
+        document.getElementById("suggestionsBox").style.display = "block";
 
-        // Display encrypted result
-        document.getElementById('encryptedText').value = encrypted;
-        document.getElementById('keyDisplay').textContent = keyDisplay;
-        document.getElementById('encryptedBox').style.display = 'block';
-    }
+        document.getElementById("encryptedText").value = encrypted;
+        document.getElementById("keyDisplay").textContent = keyDisplay;
+        document.getElementById("encryptedBox").style.display = "block";
+    });
 });
