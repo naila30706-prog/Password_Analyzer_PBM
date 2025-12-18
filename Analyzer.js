@@ -98,15 +98,19 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("encryptedBox").style.display = "block";
     });
 
-    // TOGGLE SHOW / HIDE PASSWORD
+    // TOGGLE PASSWORD (👁️ / 🙈)
     const togglePassword = document.getElementById("togglePassword");
     const passwordInput = document.getElementById("password");
 
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener("click", () => {
-            passwordInput.type =
-                passwordInput.type === "password" ? "text" : "password";
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                togglePassword.textContent = "🙈"; // password terlihat
+            } else {
+                passwordInput.type = "password";
+                togglePassword.textContent = "👁️"; // password disembunyikan
+            }
         });
     }
-
 });
