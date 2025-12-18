@@ -1,178 +1,46 @@
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Password Weakness Analyzer</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <h1>CHECK YOUR PASSWORD</h1>
-
-        <form method="POST">
-            <label><strong>Masukkan password anda</strong></label><br>
-            <input type="text" name="password" placeholder="Ketik password di sini" required autofocus>
-            <% if (strength !== null) { %>
-                <div class="strength"><%= strength %>%</div>
-            <% } %>
-            <br>
-            <input type="submit" value="Password Enkripsi">
-        </form>
-
-        <% if (suggestions && suggestions.length > 0) { %>
-        <div class="box">
-            <p><strong>Saran Password!</strong></p>
-            <ul class="suggestions">
-                <% suggestions.forEach(s => { %>
-                    <li><%= s %></li>
-                <% }); %>
-            </ul>
-        </div>
-        <% } %>
-
-        <% if (encrypted) { %>
-        <div class="box">
-            <p><strong>Password Enkripsi (AES-256-CBC)</strong></p>
-            <textarea readonly><%= encrypted %></textarea>
-            <p class="key-info">
-                Kunci (Key): <%= key_display %><br>
-                IV disisipkan di awal ciphertext
-            </p>
-        </div>
-        <% } %>
-    </div>
-</body>
-</html>
-=======
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Password Weakness Analyzer</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>CHECK YOUR PASSWORD</h1>
 
-        <form id="passwordForm">
-            <label><strong>Masukkan password anda</strong></label><br>
-            <input type="text" id="password" placeholder="Ketik password di sini" required autofocus>
-            <div id="strengthDisplay" class="strength" style="display: none;"></div>
-            <br>
-            <input type="submit" value="Password Enkripsi">
-        </form>
+<div class="container">
+    <h1>CHECK YOUR PASSWORD</h1>
 
-        <div id="suggestionsBox" class="box" style="display: none;">
-            <p><strong>Saran Password!</strong></p>
-            <ul id="suggestionsList" class="suggestions"></ul>
-        </div>
+    <form id="passwordForm">
+        <label><strong>Masukkan password anda</strong></label><br>
+        <input type="password" id="password" placeholder="Ketik password di sini" required autofocus>
 
-        <div id="encryptedBox" class="box" style="display: none;">
-            <p><strong>Password Enkripsi (AES-256-CBC)</strong></p>
-            <textarea id="encryptedText" readonly></textarea>
-            <p class="key-info">
-                Kunci (Key): <span id="keyDisplay"></span><br>
-                IV disisipkan di awal ciphertext
-            </p>
-        </div>
+        <div id="strengthDisplay" class="strength" style="display:none;"></div>
+        <br>
+
+        <input type="submit" value="Password Enkripsi">
+    </form>
+
+    <div id="suggestionsBox" class="box" style="display:none;">
+        <p><strong>Saran Password!</strong></p>
+        <ul id="suggestionsList" class="suggestions"></ul>
     </div>
 
-    <script>
-        // Generate random key and IV
-        let KEY = CryptoJS.lib.WordArray.random(32);
-        let IV = CryptoJS.lib.WordArray.random(16);
+    <div id="encryptedBox" class="box" style="display:none;">
+        <p><strong>Password Enkripsi (AES-256-CBC)</strong></p>
+        <textarea id="encryptedText" readonly></textarea>
+        <p class="key-info">
+            Kunci (Key): <span id="keyDisplay"></span><br>
+            IV disisipkan di awal ciphertext
+        </p>
+    </div>
+</div>
 
-        function encryptPassword(password) {
-            const encrypted = CryptoJS.AES.encrypt(password, KEY, {
-                iv: IV,
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7
-            });
+<!-- Library CryptoJS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
-            const ivCiphertext = IV.concat(encrypted.ciphertext);
-            const encryptedB64 = CryptoJS.enc.Base64.stringify(ivCiphertext);
-            const keyB64 = CryptoJS.enc.Base64.stringify(KEY);
+<!-- Logic utama -->
+<script src="Analyzer.js" defer></script>
 
-            return [encryptedB64, keyB64];
-        }
-
-        function checkStrength(password) {
-            let score = 0;
-            let suggestions = [];
-
-            if (password.length < 8) {
-                suggestions.push("Minimal 8 karakter");
-            } else {
-                score += 1;
-            }
-
-            if (!/[A-Z]/.test(password)) {
-                suggestions.push("Tambahkan huruf besar");
-            } else {
-                score += 1;
-            }
-
-            if (!/[a-z]/.test(password)) {
-                suggestions.push("Tambahkan huruf kecil");
-            } else {
-                score += 1;
-            }
-
-            if (!/\d/.test(password)) {
-                suggestions.push("Tambahkan angka");
-            } else {
-                score += 1;
-            }
-
-            if (!/[^a-zA-Z0-9]/.test(password)) {
-                suggestions.push("Tambahkan simbol");
-            } else {
-                score += 1;
-            }
-
-            const common = ['123456', 'qwerty', 'password', 'admin', '123456789', 'qwerty123'];
-            if (common.includes(password.toLowerCase())) {
-                suggestions.push("Jangan gunakan password umum");
-                score = 0;
-            }
-
-            if (suggestions.length === 0) {
-                suggestions = ["Password Anda sangat kuat!"];
-            }
-
-            const strength = Math.floor((score / 5) * 100);
-            return [strength, suggestions];
-        }
-
-        document.getElementById('passwordForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const password = document.getElementById('password').value;
-
-            if (password) {
-                const [strength, suggestions] = checkStrength(password);
-                const [encrypted, keyDisplay] = encryptPassword(password);
-
-                // Display strength
-                document.getElementById('strengthDisplay').textContent = strength + '%';
-                document.getElementById('strengthDisplay').style.display = 'block';
-
-                // Display suggestions
-                const suggestionsList = document.getElementById('suggestionsList');
-                suggestionsList.innerHTML = '';
-                suggestions.forEach(s => {
-                    const li = document.createElement('li');
-                    li.textContent = s;
-                    suggestionsList.appendChild(li);
-                });
-                document.getElementById('suggestionsBox').style.display = 'block';
-
-                // Display encrypted result
-                document.getElementById('encryptedText').value = encrypted;
-                document.getElementById('keyDisplay').textContent = keyDisplay;
-                document.getElementById('encryptedBox').style.display = 'block';
-            }
-        });
-    </script>
 </body>
 </html>
+
