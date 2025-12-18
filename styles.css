@@ -28,7 +28,7 @@ input[type="submit"] {
     border-radius: 15px;
 }
 
-/* Password + toggle icon */
+/* Password wrapper + toggle text */
 .password-wrapper {
     position: relative;
     display: inline-block;
@@ -36,19 +36,23 @@ input[type="submit"] {
 }
 
 .password-wrapper input {
-    width: 100%;
-    padding-right: 45px; /* ruang untuk ikon mata */
+    width: 90%;
+    padding-right: 120px; /* ruang untuk teks Show / Hide */
 }
 
-#togglePassword {
+/* Toggle Show / Hide */
+.toggle-password {
     position: absolute;
-    right: 22px;
+    right: 25px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    font-size: 1.3em;
+
+    font-size: 0.9em;
+    font-weight: bold;
+    color: navy;
+
     user-select: none;
-    padding: 5px; /* biar gampang diklik di HP */
 }
 
 /* Strength display */
@@ -97,4 +101,3 @@ textarea {
     text-align: left;
     display: inline-block;
 }
-
