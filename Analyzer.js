@@ -106,12 +106,13 @@ document.addEventListener("DOMContentLoaded", () => {
         togglePassword.addEventListener("click", () => {
             if (passwordInput.type === "password") {
                 passwordInput.type = "text";
-                togglePassword.textContent = "Sembunyikan";
+                togglePassword.textContent = "Hide";
             } else {
                 passwordInput.type = "password";
-                togglePassword.textContent = "Tampilkan";
+                togglePassword.textContent = "Show";
             }
         });
     }
 
 });
+
