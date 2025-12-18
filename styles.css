@@ -1,35 +1,90 @@
+/* =========================
+   GLOBAL
+========================= */
 body {
     background: linear-gradient(to bottom, #add8e6, #ffffff);
     font-family: Arial;
     text-align: center;
     padding-top: 50px;
 }
-h1 { font-size: 3em; color: #000; }
-.container { max-width: 600px; margin: 0 auto; }
-input[type="text"], input[type="submit"] {
-    font-size: 1.2em; padding: 12px; margin: 10px;
-    border: 2px solid black; background: #ffffe0; border-radius: 15px;
+
+h1 {
+    font-size: 3em;
+    color: #000;
 }
-.strength { font-size: 2em; font-weight: bold; color: navy; }
-.box {
-    background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.5) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.5) 0%, transparent 50%),
-                #ffffe0;
-    border: 3px solid #333; padding: 15px;
-    margin: 20px auto; width: 90%; max-width: 500px; border-radius: 25px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
 }
-.key-info { font-size: 0.9em; color: #555; margin-top: 30px; }
-textarea {
-    width: 90%;
-    font-family: monospace;
-    height: auto;
-    resize: none;
+
+/* =========================
+   FORM & INPUT
+========================= */
+input[type="password"],
+input[type="submit"] {
+    font-size: 1.2em;
+    padding: 12px;
+    margin: 10px;
     border: 2px solid black;
     background: #ffffe0;
     border-radius: 15px;
-    padding: 12px;
 }
+
+/* =========================
+   STRENGTH DISPLAY
+========================= */
+.strength {
+    font-size: 2em;
+    font-weight: bold;
+    color: navy;
+}
+
+/* =========================
+   BOX RESULT
+========================= */
+.box {
+    background:
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.5) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.5) 0%, transparent 50%),
+        #ffffe0;
+
+    border: 3px solid #333;
+    padding: 15px;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   KEY INFO
+========================= */
+.key-info {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 30px;
+}
+
+/* =========================
+   TEXTAREA
+========================= */
+textarea {
+    width: 90%;
+    height: auto;
+    resize: none;
+    font-family: monospace;
+    padding: 12px;
+
+    border: 2px solid black;
+    background: #ffffe0;
+    border-radius: 15px;
+}
+
+/* =========================
+   SUGGESTIONS LIST
+========================= */
 .suggestions {
     text-align: left;
     display: inline-block;
