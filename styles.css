@@ -1,6 +1,4 @@
-/* =========================
-   GLOBAL
-========================= */
+/* Global style */
 body {
     background: linear-gradient(to bottom, #add8e6, #ffffff);
     font-family: Arial;
@@ -18,10 +16,9 @@ h1 {
     margin: 0 auto;
 }
 
-/* =========================
-   FORM & INPUT
-========================= */
+/* Form & input */
 input[type="password"],
+input[type="text"],
 input[type="submit"] {
     font-size: 1.2em;
     padding: 12px;
@@ -31,18 +28,35 @@ input[type="submit"] {
     border-radius: 15px;
 }
 
-/* =========================
-   STRENGTH DISPLAY
-========================= */
+/* Password toggle icon */
+.password-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.password-wrapper input[type="password"],
+.password-wrapper input[type="text"] {
+    padding-right: 45px; /* ruang icon mata */
+}
+
+#togglePassword {
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2em;
+    user-select: none;
+}
+
+/* Strength display */
 .strength {
     font-size: 2em;
     font-weight: bold;
     color: navy;
 }
 
-/* =========================
-   BOX RESULT
-========================= */
+/* Result box */
 .box {
     background:
         radial-gradient(circle at 20% 80%, rgba(255,255,255,0.5) 0%, transparent 50%),
@@ -58,33 +72,26 @@ input[type="submit"] {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* =========================
-   KEY INFO
-========================= */
+/* Key information */
 .key-info {
     font-size: 0.9em;
     color: #555;
     margin-top: 30px;
 }
 
-/* =========================
-   TEXTAREA
-========================= */
+/* Encrypted textarea */
 textarea {
     width: 90%;
     height: auto;
     resize: none;
     font-family: monospace;
     padding: 12px;
-
     border: 2px solid black;
     background: #ffffe0;
     border-radius: 15px;
 }
 
-/* =========================
-   SUGGESTIONS LIST
-========================= */
+/* Suggestions list */
 .suggestions {
     text-align: left;
     display: inline-block;
