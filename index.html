@@ -14,16 +14,18 @@
 
         .password-wrapper input {
             width: 90%;
-            padding-right: 45px;
+            padding-right: 120px;
         }
 
         .toggle-password {
             position: absolute;
-            right: 35px;
+            right: 20px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            font-size: 1.3em;
+            font-size: 0.9em;
+            color: navy;
+            font-weight: bold;
             user-select: none;
         }
     </style>
@@ -47,8 +49,7 @@
             <span
                 class="toggle-password"
                 id="togglePassword"
-                title="Lihat / Sembunyikan Password"
-            >👁️</span>
+            >Tampilkan</span>
         </div>
 
         <div id="strengthDisplay" class="strength" style="display:none;"></div>
@@ -73,19 +74,6 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-
-<!-- Toggle password visibility -->
-<script>
-    const toggle = document.getElementById("togglePassword");
-    const passwordInput = document.getElementById("password");
-
-    toggle.addEventListener("click", () => {
-        const isHidden = passwordInput.type === "password";
-        passwordInput.type = isHidden ? "text" : "password";
-        toggle.textContent = isHidden ? "🙈" : "👁️";
-    });
-</script>
-
 <script src="Analyzer.js" defer></script>
 
 </body>
