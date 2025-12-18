@@ -1,7 +1,8 @@
-// Generate random key and IV
-let KEY = CryptoJS.lib.WordArray.random(32);
-let IV = CryptoJS.lib.WordArray.random(16);
+// GENERATE RANDOM KEY & IV
+let KEY = CryptoJS.lib.WordArray.random(32); // AES-256
+let IV = CryptoJS.lib.WordArray.random(16);  // CBC IV
 
+// ENCRYPT PASSWORD (AES-256-CBC)
 function encryptPassword(password) {
     const encrypted = CryptoJS.AES.encrypt(password, KEY, {
         iv: IV,
@@ -16,6 +17,7 @@ function encryptPassword(password) {
     return [encryptedB64, keyB64];
 }
 
+// PASSWORD STRENGTH CHECK
 function checkStrength(password) {
     let score = 0;
     let suggestions = [];
@@ -40,7 +42,15 @@ function checkStrength(password) {
         suggestions.push("Tambahkan simbol");
     } else score++;
 
-    const common = ['123456', 'qwerty', 'password', 'admin', '123456789', 'qwerty123'];
+    const common = [
+        '123456',
+        'qwerty',
+        'password',
+        'admin',
+        '123456789',
+        'qwerty123'
+    ];
+
     if (common.includes(password.toLowerCase())) {
         suggestions.push("Jangan gunakan password umum");
         score = 0;
@@ -54,7 +64,10 @@ function checkStrength(password) {
     return [strength, suggestions];
 }
 
+// MAIN EVENT HANDLER
 document.addEventListener("DOMContentLoaded", () => {
+
+    // SUBMIT FORM
     document.getElementById("passwordForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
@@ -64,9 +77,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const [strength, suggestions] = checkStrength(password);
         const [encrypted, keyDisplay] = encryptPassword(password);
 
-        document.getElementById("strengthDisplay").textContent = strength + "%";
-        document.getElementById("strengthDisplay").style.display = "block";
+        // Show strength
+        const strengthDisplay = document.getElementById("strengthDisplay");
+        strengthDisplay.textContent = strength + "%";
+        strengthDisplay.style.display = "block";
 
+        // Show suggestions
         const suggestionsList = document.getElementById("suggestionsList");
         suggestionsList.innerHTML = "";
         suggestions.forEach(s => {
@@ -76,8 +92,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         document.getElementById("suggestionsBox").style.display = "block";
 
+        // Show encrypted output
         document.getElementById("encryptedText").value = encrypted;
         document.getElementById("keyDisplay").textContent = keyDisplay;
         document.getElementById("encryptedBox").style.display = "block";
     });
+
+    // TOGGLE SHOW / HIDE PASSWORD
+    const togglePassword = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("password");
+
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener("click", () => {
+            passwordInput.type =
+                passwordInput.type === "password" ? "text" : "password";
+        });
+    }
+
 });
