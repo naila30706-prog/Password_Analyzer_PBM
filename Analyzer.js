@@ -22,26 +22,37 @@ function checkStrength(password) {
     let score = 0;
     let suggestions = [];
 
+    // ===== TAMBAHAN: CEK PANJANG PASSWORD =====
     if (password.length < 8) {
-        suggestions.push("Minimal 8 karakter");
-    } else score++;
+        suggestions.push("Password terlalu pendek (minimal 8 karakter)");
+    } else if (password.length < 12) {
+        suggestions.push("Panjang password cukup, disarankan 12 karakter atau lebih");
+        score++; // bonus kecil
+    } else {
+        score += 2; // bonus lebih besar
+    }
 
+    // ===== CEK HURUF BESAR =====
     if (!/[A-Z]/.test(password)) {
         suggestions.push("Tambahkan huruf besar");
     } else score++;
 
+    // ===== CEK HURUF KECIL =====
     if (!/[a-z]/.test(password)) {
         suggestions.push("Tambahkan huruf kecil");
     } else score++;
 
+    // ===== CEK ANGKA =====
     if (!/\d/.test(password)) {
         suggestions.push("Tambahkan angka");
     } else score++;
 
+    // ===== CEK SIMBOL =====
     if (!/[^a-zA-Z0-9]/.test(password)) {
         suggestions.push("Tambahkan simbol");
     } else score++;
 
+    // ===== CEK PASSWORD UMUM =====
     const common = [
         '123456',
         'qwerty',
@@ -60,14 +71,14 @@ function checkStrength(password) {
         suggestions = ["Password Anda sangat kuat!"];
     }
 
-    const strength = Math.floor((score / 5) * 100);
+    // total skor sekarang maksimal 7
+    const strength = Math.floor((score / 7) * 100);
     return [strength, suggestions];
 }
 
 // MAIN EVENT HANDLER
 document.addEventListener("DOMContentLoaded", () => {
 
-    // SUBMIT FORM
     document.getElementById("passwordForm").addEventListener("submit", function (e) {
         e.preventDefault();
 
@@ -98,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("encryptedBox").style.display = "block";
     });
 
-    // TOGGLE TAMPILKAN / SEMBUNYIKAN PASSWORD (TEKS)
+    // TOGGLE TAMPILKAN / SEMBUNYIKAN PASSWORD
     const togglePassword = document.getElementById("togglePassword");
     const passwordInput = document.getElementById("password");
 
@@ -113,6 +124,4 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-
 });
-
