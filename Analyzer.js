@@ -1,33 +1,10 @@
 // ===============================
-// GENERATE RANDOM KEY & IV
+// PASSWORD HASHING (SHA-256)
 // ===============================
-const KEY = CryptoJS.lib.WordArray.random(32); // 256-bit
-const IV  = CryptoJS.lib.WordArray.random(16); // 128-bit
-
-// ===============================
-// ENCRYPT PASSWORD (AES-256-CBC)
-// ===============================
-function encryptPassword(password) {
-    const encrypted = CryptoJS.AES.encrypt(
-        password,
-        KEY,
-        {
-            iv: IV,
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
-        }
-    );
-
-    // Gabungkan IV + ciphertext
-    const ivCiphertext = IV.clone().concat(encrypted.ciphertext);
-
-    // Encode Base64
-    const encryptedB64 = CryptoJS.enc.Base64.stringify(ivCiphertext);
-
-    // Tampilkan key (edukasi)
-    const keyHex = KEY.toString(CryptoJS.enc.Hex);
-
-    return [encryptedB64, keyHex];
+function hashPassword(password) {
+    // SHA-256 hashing
+    const hash = CryptoJS.SHA256(password);
+    return hash.toString(CryptoJS.enc.Hex);
 }
 
 // ===============================
@@ -95,14 +72,18 @@ function checkStrength(password) {
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
 
-    document.getElementById("passwordForm").addEventListener("submit", function (e) {
+    const form = document.getElementById("passwordForm");
+    const passwordInput = document.getElementById("password");
+    const togglePassword = document.getElementById("togglePassword");
+
+    form.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const password = document.getElementById("password").value;
+        const password = passwordInput.value;
         if (!password) return;
 
         const [strength, suggestions] = checkStrength(password);
-        const [encrypted, keyDisplay] = encryptPassword(password);
+        const hashedPassword = hashPassword(password);
 
         // Strength
         const strengthDisplay = document.getElementById("strengthDisplay");
@@ -119,23 +100,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         document.getElementById("suggestionsBox").style.display = "block";
 
-        // Encrypted output
-        document.getElementById("encryptedText").value = encrypted;
-        document.getElementById("keyDisplay").textContent = keyDisplay;
+        // Hashed output
+        document.getElementById("encryptedText").value = hashedPassword;
         document.getElementById("encryptedBox").style.display = "block";
     });
 
-    // TOGGLE PASSWORD VISIBILITY
-    const togglePassword = document.getElementById("togglePassword");
-    const passwordInput = document.getElementById("password");
-
-    togglePassword.addEventListener("click", () => {
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            togglePassword.textContent = "Hide";
-        } else {
-            passwordInput.type = "password";
-            togglePassword.textContent = "Show";
-        }
-    });
+    // TOGGLE PASSWORD VISIBILITY (SAFE)
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener("click", () => {
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                togglePassword.textContent = "Hide";
+            } else {
+                passwordInput.type = "password";
+                togglePassword.textContent = "Show";
+            }
+        });
+    }
 });
