@@ -52,21 +52,17 @@
         <div id="strengthDisplay" class="strength" style="display:none;"></div>
         <br>
 
-        <input type="submit" value="Password Enkripsi">
+        <input type="submit" value="Analisis Password">
     </form>
 
     <div id="suggestionsBox" class="box" style="display:none;">
-        <p><strong>Saran Password!</strong></p>
+        <p><strong>Saran Password</strong></p>
         <ul id="suggestionsList" class="suggestions"></ul>
     </div>
 
     <div id="encryptedBox" class="box" style="display:none;">
-        <p><strong>Password Enkripsi (AES-256-CBC)</strong></p>
-        <textarea id="encryptedText" readonly></textarea>
-        <p>
-            <strong>Key (edukasi):</strong>
-            <span id="keyDisplay"></span>
-        </p>
+        <p><strong>Password Hash (SHA-256)</strong></p>
+        <textarea id="encryptedText" rows="4" readonly></textarea>
     </div>
 </div>
 
