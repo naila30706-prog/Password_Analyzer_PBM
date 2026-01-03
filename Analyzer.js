@@ -4,17 +4,16 @@ let IV = CryptoJS.lib.WordArray.random(16);  // CBC IV
 
 // ENCRYPT PASSWORD (AES-256-CBC)
 function encryptPassword(password) {
-    const encrypted = CryptoJS.AES.encrypt(password, KEY, {
-        iv: IV,
+    const encrypted = CryptoJS.AES.encrypt(password, {
+        iv:,
         mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7
     });
 
     const ivCiphertext = IV.concat(encrypted.ciphertext);
     const encryptedB64 = CryptoJS.enc.Base64.stringify(ivCiphertext);
-    const keyB64 = CryptoJS.enc.Base64.stringify(KEY);
 
-    return [encryptedB64, keyB64];
+    return [encryptedB64];
 }
 
 // PASSWORD STRENGTH CHECK
@@ -125,3 +124,4 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
