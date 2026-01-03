@@ -46,10 +46,7 @@
                 required
                 autofocus
             >
-            <span
-                class="toggle-password"
-                id="togglePassword"
-            >Show</span>
+            <span class="toggle-password" id="togglePassword">Show</span>
         </div>
 
         <div id="strengthDisplay" class="strength" style="display:none;"></div>
@@ -65,7 +62,11 @@
 
     <div id="encryptedBox" class="box" style="display:none;">
         <p><strong>Password Enkripsi (AES-256-CBC)</strong></p>
-        <textarea id="encryptedText" readonly></textarea>s
+        <textarea id="encryptedText" readonly></textarea>
+        <p>
+            <strong>Key (edukasi):</strong>
+            <span id="keyDisplay"></span>
+        </p>
     </div>
 </div>
 
@@ -74,5 +75,3 @@
 
 </body>
 </html>
-
-
