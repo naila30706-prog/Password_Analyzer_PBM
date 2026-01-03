@@ -1,81 +1,98 @@
+// ===============================
 // GENERATE RANDOM KEY & IV
-let KEY = CryptoJS.lib.WordArray.random(32); // AES-256
-let IV = CryptoJS.lib.WordArray.random(16);  // CBC IV
+// ===============================
+const KEY = CryptoJS.lib.WordArray.random(32); // 256-bit
+const IV  = CryptoJS.lib.WordArray.random(16); // 128-bit
 
+// ===============================
 // ENCRYPT PASSWORD (AES-256-CBC)
+// ===============================
 function encryptPassword(password) {
-    const encrypted = CryptoJS.AES.encrypt(password, {
-        iv:,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7
-    });
+    const encrypted = CryptoJS.AES.encrypt(
+        password,
+        KEY,
+        {
+            iv: IV,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        }
+    );
 
-    const ivCiphertext = IV.concat(encrypted.ciphertext);
+    // Gabungkan IV + ciphertext
+    const ivCiphertext = IV.clone().concat(encrypted.ciphertext);
+
+    // Encode Base64
     const encryptedB64 = CryptoJS.enc.Base64.stringify(ivCiphertext);
 
-    return [encryptedB64];
+    // Tampilkan key (edukasi)
+    const keyHex = KEY.toString(CryptoJS.enc.Hex);
+
+    return [encryptedB64, keyHex];
 }
 
+// ===============================
 // PASSWORD STRENGTH CHECK
+// ===============================
 function checkStrength(password) {
     let score = 0;
     let suggestions = [];
 
-    // ===== TAMBAHAN: CEK PANJANG PASSWORD =====
+    // ===== CEK PANJANG PASSWORD =====
     if (password.length < 8) {
         suggestions.push("Password terlalu pendek (minimal 8 karakter)");
     } else if (password.length < 12) {
         suggestions.push("Panjang password cukup, disarankan 12 karakter atau lebih");
-        score++; // bonus kecil
+        score++;
     } else {
-        score += 2; // bonus lebih besar
+        score += 2;
     }
 
-    // ===== CEK HURUF BESAR =====
+    // ===== HURUF BESAR =====
     if (!/[A-Z]/.test(password)) {
         suggestions.push("Tambahkan huruf besar");
     } else score++;
 
-    // ===== CEK HURUF KECIL =====
+    // ===== HURUF KECIL =====
     if (!/[a-z]/.test(password)) {
         suggestions.push("Tambahkan huruf kecil");
     } else score++;
 
-    // ===== CEK ANGKA =====
+    // ===== ANGKA =====
     if (!/\d/.test(password)) {
         suggestions.push("Tambahkan angka");
     } else score++;
 
-    // ===== CEK SIMBOL =====
+    // ===== SIMBOL =====
     if (!/[^a-zA-Z0-9]/.test(password)) {
         suggestions.push("Tambahkan simbol");
     } else score++;
 
-    // ===== CEK PASSWORD UMUM =====
+    // ===== PASSWORD UMUM =====
     const common = [
-        '123456',
-        'qwerty',
-        'password',
-        'admin',
-        '123456789',
-        'qwerty123'
+        "123456",
+        "password",
+        "qwerty",
+        "admin",
+        "123456789",
+        "qwerty123"
     ];
 
     if (common.includes(password.toLowerCase())) {
-        suggestions.push("Jangan gunakan password umum");
+        suggestions.push("Jangan gunakan password yang umum");
         score = 0;
     }
 
     if (suggestions.length === 0) {
-        suggestions = ["Password Anda sangat kuat!"];
+        suggestions.push("Password Anda sangat kuat!");
     }
 
-    // total skor sekarang maksimal 7
     const strength = Math.floor((score / 7) * 100);
     return [strength, suggestions];
 }
 
-// MAIN EVENT HANDLER
+// ===============================
+// MAIN EVENT
+// ===============================
 document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("passwordForm").addEventListener("submit", function (e) {
@@ -87,41 +104,38 @@ document.addEventListener("DOMContentLoaded", () => {
         const [strength, suggestions] = checkStrength(password);
         const [encrypted, keyDisplay] = encryptPassword(password);
 
-        // Show strength
+        // Strength
         const strengthDisplay = document.getElementById("strengthDisplay");
         strengthDisplay.textContent = strength + "%";
         strengthDisplay.style.display = "block";
 
-        // Show suggestions
+        // Suggestions
         const suggestionsList = document.getElementById("suggestionsList");
         suggestionsList.innerHTML = "";
-        suggestions.forEach(s => {
+        suggestions.forEach(text => {
             const li = document.createElement("li");
-            li.textContent = s;
+            li.textContent = text;
             suggestionsList.appendChild(li);
         });
         document.getElementById("suggestionsBox").style.display = "block";
 
-        // Show encrypted output
+        // Encrypted output
         document.getElementById("encryptedText").value = encrypted;
         document.getElementById("keyDisplay").textContent = keyDisplay;
         document.getElementById("encryptedBox").style.display = "block";
     });
 
-    // TOGGLE TAMPILKAN / SEMBUNYIKAN PASSWORD
+    // TOGGLE PASSWORD VISIBILITY
     const togglePassword = document.getElementById("togglePassword");
     const passwordInput = document.getElementById("password");
 
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener("click", () => {
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                togglePassword.textContent = "Hide";
-            } else {
-                passwordInput.type = "password";
-                togglePassword.textContent = "Show";
-            }
-        });
-    }
+    togglePassword.addEventListener("click", () => {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            togglePassword.textContent = "Hide";
+        } else {
+            passwordInput.type = "password";
+            togglePassword.textContent = "Show";
+        }
+    });
 });
-
