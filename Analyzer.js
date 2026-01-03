@@ -1,15 +1,11 @@
-// ===============================
 // PASSWORD HASHING (SHA-256)
-// ===============================
 function hashPassword(password) {
     // SHA-256 hashing
     const hash = CryptoJS.SHA256(password);
     return hash.toString(CryptoJS.enc.Hex);
 }
 
-// ===============================
 // PASSWORD STRENGTH CHECK
-// ===============================
 function checkStrength(password) {
     let score = 0;
     let suggestions = [];
@@ -67,9 +63,7 @@ function checkStrength(password) {
     return [strength, suggestions];
 }
 
-// ===============================
 // MAIN EVENT
-// ===============================
 document.addEventListener("DOMContentLoaded", () => {
 
     const form = document.getElementById("passwordForm");
@@ -118,3 +112,4 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
