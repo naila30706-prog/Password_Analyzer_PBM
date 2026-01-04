@@ -6,7 +6,7 @@ A client-side web application for analyzing password strength and encrypting pas
 
 - Password strength analysis with percentage score
 - Security suggestions for weak passwords
-- AES-256-CBC encryption with random keys
+- Hashing encryption with random keys
 - Client-side processing (no data sent to servers)
 - Responsive design
 - Modular JavaScript architecture
@@ -47,13 +47,13 @@ This is a static web application that can be deployed to any web hosting service
 All processing happens client-side in the browser. Passwords and encryption keys are not sent to any server.
 ynal# Password Weakness Analyzer
 
-A client-side web application for analyzing password strength and encrypting passwords using AES-256-CBC.
+A client-side web application for analyzing password strength and encrypting passwords using Hashing.
 
 ## Features
 
 - Password strength analysis with percentage score
 - Security suggestions for weak passwords
-- AES-256-CBC encryption with random keys
+- Hashing encryption with random keys
 - Client-side processing (no data sent to servers)
 - Responsive design
 
@@ -91,3 +91,4 @@ This is a static web application that can be deployed to any web hosting service
 ## Security Note
 
 All processing happens client-side in the browser. Passwords and encryption keys are not sent to any server.
+
