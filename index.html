@@ -1,74 +1,34 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Password Weakness Analyzer</title>
-    <link rel="stylesheet" href="styles.css">
+<style>
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background-image: url("img_2225-copy.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-family: Arial, sans-serif;
+    }
 
-    <style>
-        .password-wrapper {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
+    .password-wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+    }
 
-        .password-wrapper input {
-            width: 90%;
-            padding-right: 120px;
-        }
+    .password-wrapper input {
+        width: 90%;
+        padding-right: 120px;
+    }
 
-        .toggle-password {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 0.9em;
-            color: navy;
-            font-weight: bold;
-            user-select: none;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>CHECK YOUR PASSWORD</h1>
-
-    <form id="passwordForm">
-        <label><strong>Masukkan password anda</strong></label><br>
-
-        <div class="password-wrapper">
-            <input
-                type="password"
-                id="password"
-                placeholder="Ketik password di sini"
-                required
-                autofocus
-            >
-            <span class="toggle-password" id="togglePassword">Show</span>
-        </div>
-
-        <div id="strengthDisplay" class="strength" style="display:none;"></div>
-        <br>
-
-        <input type="submit" value="Analisis Password">
-    </form>
-
-    <div id="suggestionsBox" class="box" style="display:none;">
-        <p><strong>Saran Password</strong></p>
-        <ul id="suggestionsList" class="suggestions"></ul>
-    </div>
-
-    <div id="encryptedBox" class="box" style="display:none;">
-        <p><strong>Password Hash (AES-256)</strong></p>
-        <textarea id="encryptedText" rows="4" readonly></textarea>
-    </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-<script src="Analyzer.js" defer></script>
-
-</body>
-</html>
-
+    .toggle-password {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 0.9em;
+        color: navy;
+        font-weight: bold;
+        user-select: none;
+    }
+</style>
