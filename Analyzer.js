@@ -1,69 +1,80 @@
-// PASSWORD HASHING (SHA-256)
-function hashPassword(password) {
-    // SHA-256 hashing
-    const hash = CryptoJS.SHA256(password);
-    return hash.toString(CryptoJS.enc.Hex);
+// ===============================
+// GENERATE AES KEY & IV (DEMO)
+// ===============================
+const KEY = CryptoJS.lib.WordArray.random(32); // 256-bit key
+const IV  = CryptoJS.lib.WordArray.random(16); // 128-bit IV
+
+// ===============================
+// AES-256-CBC ENCRYPT
+// ===============================
+function encryptPassword(password) {
+    const encrypted = CryptoJS.AES.encrypt(
+        password,
+        KEY,
+        {
+            iv: IV,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        }
+    );
+
+    // Gabungkan IV + ciphertext
+    const combined = IV.clone().concat(encrypted.ciphertext);
+
+    // Encode ke Base64 agar bisa ditampilkan
+    const encryptedBase64 = CryptoJS.enc.Base64.stringify(combined);
+
+    // Key ditampilkan hanya untuk edukasi
+    const keyHex = KEY.toString(CryptoJS.enc.Hex);
+
+    return [encryptedBase64, keyHex];
 }
 
+// ===============================
 // PASSWORD STRENGTH CHECK
+// ===============================
 function checkStrength(password) {
     let score = 0;
     let suggestions = [];
 
-    // ===== CEK PANJANG PASSWORD =====
     if (password.length < 8) {
         suggestions.push("Password terlalu pendek (minimal 8 karakter)");
     } else if (password.length < 12) {
-        suggestions.push("Panjang password cukup, disarankan 12 karakter atau lebih");
+        suggestions.push("Disarankan panjang password ≥ 12 karakter");
         score++;
     } else {
         score += 2;
     }
 
-    // ===== HURUF BESAR =====
-    if (!/[A-Z]/.test(password)) {
-        suggestions.push("Tambahkan huruf besar");
-    } else score++;
+    if (/[A-Z]/.test(password)) score++;
+    else suggestions.push("Tambahkan huruf besar");
 
-    // ===== HURUF KECIL =====
-    if (!/[a-z]/.test(password)) {
-        suggestions.push("Tambahkan huruf kecil");
-    } else score++;
+    if (/[a-z]/.test(password)) score++;
+    else suggestions.push("Tambahkan huruf kecil");
 
-    // ===== ANGKA =====
-    if (!/\d/.test(password)) {
-        suggestions.push("Tambahkan angka");
-    } else score++;
+    if (/\d/.test(password)) score++;
+    else suggestions.push("Tambahkan angka");
 
-    // ===== SIMBOL =====
-    if (!/[^a-zA-Z0-9]/.test(password)) {
-        suggestions.push("Tambahkan simbol");
-    } else score++;
+    if (/[^a-zA-Z0-9]/.test(password)) score++;
+    else suggestions.push("Tambahkan simbol");
 
-    // ===== PASSWORD UMUM =====
-    const common = [
-        "123456",
-        "password",
-        "qwerty",
-        "admin",
-        "123456789",
-        "qwerty123"
-    ];
-
+    const common = ["123456", "password", "qwerty", "admin"];
     if (common.includes(password.toLowerCase())) {
-        suggestions.push("Jangan gunakan password yang umum");
+        suggestions.push("Jangan gunakan password umum");
         score = 0;
     }
 
     if (suggestions.length === 0) {
-        suggestions.push("Password Anda sangat kuat!");
+        suggestions.push("Password sangat kuat!");
     }
 
     const strength = Math.floor((score / 7) * 100);
     return [strength, suggestions];
 }
 
+// ===============================
 // MAIN EVENT
+// ===============================
 document.addEventListener("DOMContentLoaded", () => {
 
     const form = document.getElementById("passwordForm");
@@ -77,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!password) return;
 
         const [strength, suggestions] = checkStrength(password);
-        const hashedPassword = hashPassword(password);
+        const [encrypted, keyHex] = encryptPassword(password);
 
         // Strength
         const strengthDisplay = document.getElementById("strengthDisplay");
@@ -94,22 +105,20 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         document.getElementById("suggestionsBox").style.display = "block";
 
-        // Hashed output
-        document.getElementById("encryptedText").value = hashedPassword;
+        // Encrypted output
+        document.getElementById("encryptedText").value = encrypted;
+        document.getElementById("keyDisplay").textContent = keyHex;
         document.getElementById("encryptedBox").style.display = "block";
     });
 
-    // TOGGLE PASSWORD VISIBILITY (SAFE)
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener("click", () => {
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                togglePassword.textContent = "Hide";
-            } else {
-                passwordInput.type = "password";
-                togglePassword.textContent = "Show";
-            }
-        });
-    }
+    // Toggle show / hide password
+    togglePassword.addEventListener("click", () => {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            togglePassword.textContent = "Hide";
+        } else {
+            passwordInput.type = "password";
+            togglePassword.textContent = "Show";
+        }
+    });
 });
-
