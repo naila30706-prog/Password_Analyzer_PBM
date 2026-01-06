@@ -1,6 +1,4 @@
-/* =======================
-   HASHING (PBKDF2 TANPA SALT)
-   ======================= */
+/* HASHING */
 function hashPassword(password) {
     const hash = CryptoJS.PBKDF2(password, password, {
         keySize: 256 / 32,
@@ -13,9 +11,7 @@ function hashPassword(password) {
     };
 }
 
-/* =======================
-   PASSWORD STRENGTH CHECK
-   ======================= */
+/* PASSWORD STRENGTH CHECK */
 function checkStrength(password) {
     let score = 0;
     let suggestions = [];
@@ -38,9 +34,7 @@ function checkStrength(password) {
     return [Math.floor((score / 5) * 100), suggestions];
 }
 
-/* =======================
-   FORM HANDLER
-   ======================= */
+/*FORM HANDLER*/
 document.getElementById("passwordForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -68,12 +62,11 @@ document.getElementById("passwordForm").addEventListener("submit", function (e) 
     document.getElementById("encryptedBox").style.display = "block";
 });
 
-/* =======================
-   PASSWORD VISIBILITY
-   ======================= */
+/*PASSWORD VISIBILITY*/
 document.getElementById("togglePassword").addEventListener("click", () => {
     const input = document.getElementById("password");
     input.type = input.type === "password" ? "text" : "password";
     document.getElementById("togglePassword").textContent =
         input.type === "password" ? "Show" : "Hide";
 });
+
