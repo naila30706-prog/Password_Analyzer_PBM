@@ -61,8 +61,11 @@
     </div>
 
     <div id="encryptedBox" class="box" style="display:none;">
-        <p><strong>Password Enkripsi (AES-256-CBC)</strong></p>
-        <textarea id="encryptedText" rows="4" readonly></textarea>
+        <p><strong>Ciphertext (Base64)</strong></p>
+        <textarea id="encryptedText" rows="3" readonly></textarea>
+
+        <p><strong>IV (Base64)</strong></p>
+        <textarea id="ivText" rows="2" readonly></textarea>
 
         <p>
             <strong>Key (Base64)</strong>
