@@ -1,42 +1,71 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Password Weakness Analyzer</title>
-    <link rel="stylesheet" href="styles.css">
 
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        .container {
+            width: 420px;
+            margin: 60px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
         .password-wrapper {
             position: relative;
-            display: inline-block;
             width: 100%;
         }
 
         .password-wrapper input {
-            width: 90%;
-            padding-right: 120px;
+            width: 100%;
+            padding: 10px;
+            padding-right: 80px;
+            box-sizing: border-box;
         }
 
         .toggle-password {
             position: absolute;
-            right: 20px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            font-size: 0.9em;
-            color: navy;
             font-weight: bold;
+            color: navy;
             user-select: none;
+        }
+
+        .box {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        ul {
+            padding-left: 20px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>CHECK YOUR PASSWORD</h1>
+    <h2>CHECK YOUR PASSWORD</h2>
 
     <form id="passwordForm">
-        <label><strong>Masukkan password anda</strong></label><br>
+        <label><strong>Masukkan password</strong></label><br><br>
 
         <div class="password-wrapper">
             <input
@@ -44,34 +73,34 @@
                 id="password"
                 placeholder="Ketik password di sini"
                 required
-                autofocus
             >
             <span class="toggle-password" id="togglePassword">Show</span>
         </div>
 
-        <div id="strengthDisplay" class="strength" style="display:none;"></div>
+        <br>
+        <div id="strengthDisplay" style="display:none;"></div>
         <br>
 
         <input type="submit" value="Analisis Password">
     </form>
 
     <div id="suggestionsBox" class="box" style="display:none;">
-        <p><strong>Saran Password</strong></p>
-        <ul id="suggestionsList" class="suggestions"></ul>
+        <strong>Saran Password:</strong>
+        <ul id="suggestionsList"></ul>
     </div>
 
     <div id="encryptedBox" class="box" style="display:none;">
-    <p><strong>Password Enkripsi (AES-256-CBC)</strong></p>
-    <textarea id="encryptedText" rows="4" readonly></textarea>
-    </div>
+        <strong>Password Enkripsi (AES-256-CBC)</strong>
+        <textarea id="encryptedText" rows="4" readonly></textarea>
+
+        <br><br>
+        <strong>Key (Base64)</strong>
+        <p id="keyDisplay" style="word-break: break-all;"></p>
     </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-<script src="Analyzer.js" defer></script>
+<script src="Analyzer.js"></script>
 
 </body>
 </html>
-      
-
-
