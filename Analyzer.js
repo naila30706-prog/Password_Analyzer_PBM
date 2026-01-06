@@ -1,20 +1,21 @@
-/* HASHING */
+/* =======================
+   HASHING (PBKDF2 TANPA SALT)
+   ======================= */
 function hashPassword(password) {
-    const salt = CryptoJS.lib.WordArray.random(16);
-
-    const hash = CryptoJS.PBKDF2(password, salt, {
+    const hash = CryptoJS.PBKDF2(password, password, {
         keySize: 256 / 32,
         iterations: 100000,
         hasher: CryptoJS.algo.SHA256
     });
 
     return {
-        hash: CryptoJS.enc.Base64.stringify(hash),
-        salt: CryptoJS.enc.Base64.stringify(salt)
+        hash: CryptoJS.enc.Base64.stringify(hash)
     };
 }
 
-/* PASSWORD STRENGTH CHECK*/
+/* =======================
+   PASSWORD STRENGTH CHECK
+   ======================= */
 function checkStrength(password) {
     let score = 0;
     let suggestions = [];
@@ -37,7 +38,9 @@ function checkStrength(password) {
     return [Math.floor((score / 5) * 100), suggestions];
 }
 
-/* FORM HANDLER*/
+/* =======================
+   FORM HANDLER
+   ======================= */
 document.getElementById("passwordForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -60,14 +63,14 @@ document.getElementById("passwordForm").addEventListener("submit", function (e) 
     });
     document.getElementById("suggestionsBox").style.display = "block";
 
-    /* OUTPUT HASH & SALT */
+    /* OUTPUT HASH SAJA */
     document.getElementById("encryptedText").value = result.hash;
-    document.getElementById("saltText").value = result.salt;
-
     document.getElementById("encryptedBox").style.display = "block";
 });
 
-/* PASSWORD VISIBILITY*/
+/* =======================
+   PASSWORD VISIBILITY
+   ======================= */
 document.getElementById("togglePassword").addEventListener("click", () => {
     const input = document.getElementById("password");
     input.type = input.type === "password" ? "text" : "password";
