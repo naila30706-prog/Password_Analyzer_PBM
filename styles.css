@@ -1,22 +1,52 @@
-/* Global style */
+/* ===============================
+   GLOBAL STYLE
+=============================== */
 body {
-    background: linear-gradient(to bottom, #add8e6, #ffffff);
-    font-family: Arial;
+    margin: 0;
+    min-height: 100vh;
+
+    /* Background gambar */
+    background-image: url("img_2225-copy.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* Overlay biar teks kebaca */
+    position: relative;
+
+    font-family: Arial, sans-serif;
     text-align: center;
     padding-top: 50px;
 }
 
+/* Overlay lembut */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.45);
+    z-index: -1;
+}
+
+/* ===============================
+   HEADER
+=============================== */
 h1 {
     font-size: 3em;
     color: #000;
 }
 
+/* ===============================
+   CONTAINER
+=============================== */
 .container {
     max-width: 600px;
     margin: 0 auto;
 }
 
-/* Form & input */
+/* ===============================
+   FORM & INPUT
+=============================== */
 input[type="password"],
 input[type="text"],
 input[type="submit"] {
@@ -28,7 +58,9 @@ input[type="submit"] {
     border-radius: 15px;
 }
 
-/* Password wrapper + toggle text */
+/* ===============================
+   PASSWORD WRAPPER
+=============================== */
 .password-wrapper {
     position: relative;
     display: inline-block;
@@ -37,10 +69,12 @@ input[type="submit"] {
 
 .password-wrapper input {
     width: 90%;
-    padding-right: 120px; /* ruang untuk teks Show / Hide */
+    padding-right: 120px;
 }
 
-/* Toggle Show / Hide */
+/* ===============================
+   TOGGLE SHOW / HIDE
+=============================== */
 .toggle-password {
     position: absolute;
     right: 25px;
@@ -51,18 +85,21 @@ input[type="submit"] {
     font-size: 0.9em;
     font-weight: bold;
     color: navy;
-
     user-select: none;
 }
 
-/* Strength display */
+/* ===============================
+   STRENGTH DISPLAY
+=============================== */
 .strength {
     font-size: 2em;
     font-weight: bold;
     color: navy;
 }
 
-/* Result box */
+/* ===============================
+   RESULT BOX
+=============================== */
 .box {
     background:
         radial-gradient(circle at 20% 80%, rgba(255,255,255,0.5) 0%, transparent 50%),
@@ -78,14 +115,9 @@ input[type="submit"] {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* Key information */
-.key-info {
-    font-size: 0.9em;
-    color: #555;
-    margin-top: 30px;
-}
-
-/* Encrypted textarea */
+/* ===============================
+   TEXTAREA
+=============================== */
 textarea {
     width: 90%;
     resize: none;
@@ -96,8 +128,19 @@ textarea {
     border-radius: 15px;
 }
 
-/* Suggestions list */
+/* ===============================
+   SUGGESTIONS
+=============================== */
 .suggestions {
     text-align: left;
     display: inline-block;
+}
+
+/* ===============================
+   KEY INFO (JIKA DIPAKAI)
+=============================== */
+.key-info {
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 30px;
 }
