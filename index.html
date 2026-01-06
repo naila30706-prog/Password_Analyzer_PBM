@@ -28,13 +28,6 @@
             font-weight: bold;
             user-select: none;
         }
-
-        .toggle-key {
-            cursor: pointer;
-            color: navy;
-            font-weight: bold;
-            user-select: none;
-        }
     </style>
 </head>
 <body>
@@ -61,17 +54,11 @@
     </div>
 
     <div id="encryptedBox" class="box" style="display:none;">
-        <p><strong>Ciphertext (Base64)</strong></p>
+        <p><strong>Password Hash (Base64)</strong></p>
         <textarea id="encryptedText" rows="3" readonly></textarea>
 
-        <p><strong>IV (Base64)</strong></p>
-        <textarea id="ivText" rows="2" readonly></textarea>
-
-        <p>
-            <strong>Key (Base64)</strong>
-            <span class="toggle-key" id="toggleKey">Show</span>
-        </p>
-        <p id="keyDisplay">••••••••••••••••••••••••••</p>
+        <p><strong>Salt (Base64)</strong></p>
+        <textarea id="saltText" rows="2" readonly></textarea>
     </div>
 </div>
 
