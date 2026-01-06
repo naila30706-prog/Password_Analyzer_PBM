@@ -1,15 +1,21 @@
-// GENERATE RANDOM KEY & IV
-const KEY = CryptoJS.lib.WordArray.random(32); // AES-256
-const IV  = CryptoJS.lib.WordArray.random(16); // CBC IV
+let currentKey = "";
+let keyVisible = false;
 
-// ENCRYPT PASSWORD (AES-256-CBC)
 function encryptPassword(password) {
-    const encrypted = CryptoJS.AES.encrypt(password, KEY, {
+
+    // Generate KEY & IV
+    const KEY = CryptoJS.lib.WordArray.random(32);
+    const IV  = CryptoJS.lib.WordArray.random(16);
+
+    const passwordWA = CryptoJS.enc.Utf8.parse(password);
+
+    const encrypted = CryptoJS.AES.encrypt(passwordWA, KEY, {
         iv: IV,
         mode: CryptoJS.mode.CBC,
         padding: CryptoJS.pad.Pkcs7
     });
 
+    // IV + ciphertext
     const ivCiphertext = IV.clone().concat(encrypted.ciphertext);
 
     return {
@@ -18,7 +24,6 @@ function encryptPassword(password) {
     };
 }
 
-// PASSWORD STRENGTH CHECK
 function checkStrength(password) {
     let score = 0;
     let suggestions = [];
@@ -38,63 +43,63 @@ function checkStrength(password) {
     if (/[^a-zA-Z0-9]/.test(password)) score++;
     else suggestions.push("Tambahkan simbol");
 
-    const common = [
-        "123456", "password", "admin", "qwerty", "123456789"
-    ];
+    const common = ["123456", "password", "admin", "qwerty", "123456789"];
 
     if (common.includes(password.toLowerCase())) {
-        score = 0;
-        suggestions = ["Jangan gunakan password umum"];
+        return [0, ["Jangan gunakan password umum"]];
     }
 
     if (suggestions.length === 0) {
         suggestions.push("Password Anda sangat kuat!");
     }
 
-    const strength = Math.floor((score / 5) * 100);
-    return [strength, suggestions];
+    return [Math.floor((score / 5) * 100), suggestions];
 }
 
-// MAIN EVENT
 document.getElementById("passwordForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
     const password = document.getElementById("password").value;
-
     const [strength, suggestions] = checkStrength(password);
     const result = encryptPassword(password);
 
-    // Strength
     const strengthDisplay = document.getElementById("strengthDisplay");
     strengthDisplay.textContent = "Kekuatan Password: " + strength + "%";
     strengthDisplay.style.display = "block";
 
-    // Suggestions
     const list = document.getElementById("suggestionsList");
     list.innerHTML = "";
-    suggestions.forEach(s => {
+    suggestions.forEach(text => {
         const li = document.createElement("li");
-        li.textContent = s;
+        li.textContent = text;
         list.appendChild(li);
     });
     document.getElementById("suggestionsBox").style.display = "block";
 
-    // Encrypted output
     document.getElementById("encryptedText").value = result.encrypted;
-    document.getElementById("keyDisplay").textContent = result.key;
+
+    currentKey = result.key;
+    keyVisible = false;
+    document.getElementById("keyDisplay").textContent = "••••••••••••••••••••••••••";
+    document.getElementById("toggleKey").textContent = "Show";
+
     document.getElementById("encryptedBox").style.display = "block";
 });
 
-// TOGGLE SHOW / HIDE PASSWORD
 document.getElementById("togglePassword").addEventListener("click", () => {
     const input = document.getElementById("password");
     const toggle = document.getElementById("togglePassword");
 
-    if (input.type === "password") {
-        input.type = "text";
-        toggle.textContent = "Hide";
-    } else {
-        input.type = "password";
-        toggle.textContent = "Show";
-    }
+    input.type = input.type === "password" ? "text" : "password";
+    toggle.textContent = input.type === "password" ? "Show" : "Hide";
+});
+
+document.getElementById("toggleKey").addEventListener("click", () => {
+    keyVisible = !keyVisible;
+
+    document.getElementById("keyDisplay").textContent =
+        keyVisible ? currentKey : "••••••••••••••••••••••••••";
+
+    document.getElementById("toggleKey").textContent =
+        keyVisible ? "Hide" : "Show";
 });
