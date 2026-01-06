@@ -1,21 +1,16 @@
-let currentKey = "";
-let keyVisible = false;
+/* HASHING */
+function hashPassword(password) {
+    const salt = CryptoJS.lib.WordArray.random(16);
 
-/* AES-256-CBC ENCRYPTION */
-function encryptPassword(password) {
-    const KEY = CryptoJS.lib.WordArray.random(32);
-    const IV  = CryptoJS.lib.WordArray.random(16);
-
-    const encrypted = CryptoJS.AES.encrypt(password, KEY, {
-        iv: IV,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7
+    const hash = CryptoJS.PBKDF2(password, salt, {
+        keySize: 256 / 32,
+        iterations: 100000,
+        hasher: CryptoJS.algo.SHA256
     });
 
     return {
-        ciphertext: CryptoJS.enc.Base64.stringify(encrypted.ciphertext),
-        key: CryptoJS.enc.Base64.stringify(KEY),
-        iv: CryptoJS.enc.Base64.stringify(IV)
+        hash: CryptoJS.enc.Base64.stringify(hash),
+        salt: CryptoJS.enc.Base64.stringify(salt)
     };
 }
 
@@ -45,7 +40,7 @@ document.getElementById("passwordForm").addEventListener("submit", function (e) 
 
     const password = document.getElementById("password").value;
     const [strength, suggestions] = checkStrength(password);
-    const result = encryptPassword(password);
+    const result = hashPassword(password);
 
     document.getElementById("strengthDisplay").textContent =
         "Kekuatan Password: " + strength + "%";
@@ -60,15 +55,9 @@ document.getElementById("passwordForm").addEventListener("submit", function (e) 
     });
     document.getElementById("suggestionsBox").style.display = "block";
 
-    document.getElementById("encryptedText").value = result.ciphertext;
-    document.getElementById("ivText").value = result.iv;
+    document.getElementById("encryptedText").value =
+        "Hash (Base64):\n" + result.hash + "\n\nSalt (Base64):\n" + result.salt;
 
-    currentKey = result.key;
-    keyVisible = false;
-
-    document.getElementById("keyDisplay").textContent =
-        "••••••••••••••••••••••••••";
-    document.getElementById("toggleKey").textContent = "Show";
     document.getElementById("encryptedBox").style.display = "block";
 });
 
@@ -78,13 +67,4 @@ document.getElementById("togglePassword").addEventListener("click", () => {
     input.type = input.type === "password" ? "text" : "password";
     document.getElementById("togglePassword").textContent =
         input.type === "password" ? "Show" : "Hide";
-});
-
-/* KEY VISIBILITY */
-document.getElementById("toggleKey").addEventListener("click", () => {
-    keyVisible = !keyVisible;
-    document.getElementById("keyDisplay").textContent =
-        keyVisible ? currentKey : "••••••••••••••••••••••••••";
-    document.getElementById("toggleKey").textContent =
-        keyVisible ? "Hide" : "Show";
 });
