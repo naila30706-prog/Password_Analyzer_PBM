@@ -14,7 +14,7 @@ function hashPassword(password) {
     };
 }
 
-/* PASSWORD STRENGTH ANALYSIS */
+/* PASSWORD STRENGTH CHECK*/
 function checkStrength(password) {
     let score = 0;
     let suggestions = [];
@@ -30,11 +30,14 @@ function checkStrength(password) {
         return [0, ["Jangan gunakan password umum"]];
     }
 
-    if (suggestions.length === 0) suggestions.push("Password Anda sangat kuat!");
+    if (suggestions.length === 0) {
+        suggestions.push("Password Anda sangat kuat!");
+    }
+
     return [Math.floor((score / 5) * 100), suggestions];
 }
 
-/* FORM HANDLER */
+/* FORM HANDLER*/
 document.getElementById("passwordForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -42,26 +45,29 @@ document.getElementById("passwordForm").addEventListener("submit", function (e) 
     const [strength, suggestions] = checkStrength(password);
     const result = hashPassword(password);
 
-    document.getElementById("strengthDisplay").textContent =
-        "Kekuatan Password: " + strength + "%";
-    document.getElementById("strengthDisplay").style.display = "block";
+    /* Strength display */
+    const strengthDisplay = document.getElementById("strengthDisplay");
+    strengthDisplay.textContent = "Kekuatan Password: " + strength + "%";
+    strengthDisplay.style.display = "block";
 
+    /* Suggestions */
     const list = document.getElementById("suggestionsList");
     list.innerHTML = "";
-    suggestions.forEach(s => {
+    suggestions.forEach(text => {
         const li = document.createElement("li");
-        li.textContent = s;
+        li.textContent = text;
         list.appendChild(li);
     });
     document.getElementById("suggestionsBox").style.display = "block";
 
-    document.getElementById("encryptedText").value =
-        "Hash (Base64):\n" + result.hash + "\n\nSalt (Base64):\n" + result.salt;
+    /* OUTPUT HASH & SALT */
+    document.getElementById("encryptedText").value = result.hash;
+    document.getElementById("saltText").value = result.salt;
 
     document.getElementById("encryptedBox").style.display = "block";
 });
 
-/* PASSWORD VISIBILITY */
+/* PASSWORD VISIBILITY*/
 document.getElementById("togglePassword").addEventListener("click", () => {
     const input = document.getElementById("password");
     input.type = input.type === "password" ? "text" : "password";
