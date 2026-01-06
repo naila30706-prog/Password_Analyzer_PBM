@@ -1,103 +1,109 @@
-/* Global style */
 body {
-    background: linear-gradient(to bottom, #add8e6, #ffffff);
-    font-family: Arial;
-    text-align: center;
-    padding-top: 50px;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #cfeef5, #b6dfe9);
 }
 
-h1 {
-    font-size: 3em;
-    color: #000;
-}
-
+/* CONTAINER UTAMA */
 .container {
-    max-width: 600px;
-    margin: 0 auto;
+    max-width: 800px;
+    margin: 60px auto;
+    text-align: center;
 }
 
-/* Form & input */
-input[type="password"],
-input[type="text"],
-input[type="submit"] {
-    font-size: 1.2em;
-    padding: 12px;
-    margin: 10px;
-    border: 2px solid black;
-    background: #ffffe0;
-    border-radius: 15px;
+/* JUDUL */
+h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
 }
 
-/* Password wrapper + toggle text */
+/* LABEL */
+label {
+    font-size: 18px;
+}
+
+/* INPUT PASSWORD */
 .password-wrapper {
     position: relative;
-    display: inline-block;
-    width: 100%;
+    margin-top: 15px;
 }
 
 .password-wrapper input {
-    width: 90%;
-    padding-right: 120px; /* ruang untuk teks Show / Hide */
+    width: 100%;
+    padding: 16px 110px 16px 20px;
+    font-size: 18px;
+    border-radius: 20px;
+    border: 2px solid #333;
+    background: #fffde6;
+    outline: none;
 }
 
-/* Toggle Show / Hide */
+/* SHOW / HIDE */
 .toggle-password {
     position: absolute;
     right: 25px;
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-
-    font-size: 0.9em;
     font-weight: bold;
     color: navy;
-
-    user-select: none;
 }
 
-/* Strength display */
+/* PERSENTASE STRENGTH */
 .strength {
-    font-size: 2em;
+    font-size: 36px;
     font-weight: bold;
     color: navy;
+    margin: 25px 0;
 }
 
-/* Result box */
-.box {
-    background:
-        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.5) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.5) 0%, transparent 50%),
-        #ffffe0;
-
-    border: 3px solid #333;
-    padding: 15px;
-    margin: 20px auto;
-    width: 90%;
-    max-width: 500px;
-    border-radius: 25px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-}
-
-/* Key information */
-.key-info {
-    font-size: 0.9em;
-    color: #555;
-    margin-top: 30px;
-}
-
-/* Encrypted textarea */
-textarea {
-    width: 90%;
-    resize: none;
-    font-family: monospace;
-    padding: 12px;
-    border: 2px solid black;
-    background: #ffffe0;
+/* TOMBOL */
+input[type="submit"] {
+    padding: 14px 40px;
+    font-size: 16px;
     border-radius: 15px;
+    border: 2px solid #333;
+    background: #fff8cc;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-/* Suggestions list */
+input[type="submit"]:hover {
+    background: #fff3a0;
+}
+
+/* BOX SARAN & ENKRIPSI */
+.box {
+    margin-top: 35px;
+    padding: 25px;
+    border-radius: 25px;
+    border: 2px solid #333;
+    background: #fffde6;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* LIST SARAN */
 .suggestions {
     text-align: left;
-    display: inline-block;
-} 
+    margin-top: 15px;
+    padding-left: 20px;
+}
+
+/* TEXTAREA ENKRIPSI */
+textarea {
+    width: 100%;
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 15px;
+    border: 2px solid #333;
+    font-size: 14px;
+    resize: none;
+    background: #fff;
+}
+
+/* KEY EDUKASI */
+#keyDisplay {
+    word-break: break-all;
+    font-size: 13px;
+}
