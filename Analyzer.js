@@ -1,29 +1,50 @@
 let currentKey = "";
+let currentIV  = "";
 let keyVisible = false;
 
+// ENCRYPT
 function encryptPassword(password) {
 
-    // Generate KEY & IV
-    const KEY = CryptoJS.lib.WordArray.random(32);
-    const IV  = CryptoJS.lib.WordArray.random(16);
+    const KEY = CryptoJS.lib.WordArray.random(32); // 256-bit
+    const IV  = CryptoJS.lib.WordArray.random(16); // 128-bit
 
-    const passwordWA = CryptoJS.enc.Utf8.parse(password);
-
-    const encrypted = CryptoJS.AES.encrypt(passwordWA, KEY, {
-        iv: IV,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7
-    });
-
-    // IV + ciphertext
-    const ivCiphertext = IV.clone().concat(encrypted.ciphertext);
+    const encrypted = CryptoJS.AES.encrypt(
+        password,
+        KEY,
+        {
+            iv: IV,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        }
+    );
 
     return {
-        encrypted: CryptoJS.enc.Base64.stringify(ivCiphertext),
-        key: CryptoJS.enc.Base64.stringify(KEY)
+        ciphertext: CryptoJS.enc.Base64.stringify(encrypted.ciphertext),
+        key: CryptoJS.enc.Base64.stringify(KEY),
+        iv: CryptoJS.enc.Base64.stringify(IV)
     };
 }
 
+//  DECRYPT 
+function decryptPassword(ciphertextB64, keyB64, ivB64) {
+    const key = CryptoJS.enc.Base64.parse(keyB64);
+    const iv  = CryptoJS.enc.Base64.parse(ivB64);
+    const ciphertext = CryptoJS.enc.Base64.parse(ciphertextB64);
+
+    const decrypted = CryptoJS.AES.decrypt(
+        { ciphertext: ciphertext },
+        key,
+        {
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        }
+    );
+
+    return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+// PASSWORD STRENGTH
 function checkStrength(password) {
     let score = 0;
     let suggestions = [];
@@ -44,7 +65,6 @@ function checkStrength(password) {
     else suggestions.push("Tambahkan simbol");
 
     const common = ["123456", "password", "admin", "qwerty", "123456789"];
-
     if (common.includes(password.toLowerCase())) {
         return [0, ["Jangan gunakan password umum"]];
     }
@@ -56,6 +76,7 @@ function checkStrength(password) {
     return [Math.floor((score / 5) * 100), suggestions];
 }
 
+//  FORM SUBMIT 
 document.getElementById("passwordForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -76,16 +97,22 @@ document.getElementById("passwordForm").addEventListener("submit", function (e) 
     });
     document.getElementById("suggestionsBox").style.display = "block";
 
-    document.getElementById("encryptedText").value = result.encrypted;
+    document.getElementById("encryptedText").value =
+        "Ciphertext:\n" + result.ciphertext +
+        "\n\nIV:\n" + result.iv;
 
     currentKey = result.key;
+    currentIV  = result.iv;
     keyVisible = false;
-    document.getElementById("keyDisplay").textContent = "••••••••••••••••••••••••••";
-    document.getElementById("toggleKey").textContent = "Show";
 
+    document.getElementById("keyDisplay").textContent =
+        "••••••••••••••••••••••••••";
+
+    document.getElementById("toggleKey").textContent = "Show";
     document.getElementById("encryptedBox").style.display = "block";
 });
 
+//  TOGGLE PASSWORD
 document.getElementById("togglePassword").addEventListener("click", () => {
     const input = document.getElementById("password");
     const toggle = document.getElementById("togglePassword");
@@ -94,6 +121,7 @@ document.getElementById("togglePassword").addEventListener("click", () => {
     toggle.textContent = input.type === "password" ? "Show" : "Hide";
 });
 
+// TOGGLE KEY 
 document.getElementById("toggleKey").addEventListener("click", () => {
     keyVisible = !keyVisible;
 
